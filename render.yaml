@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: rag-pwa
+    runtime: python
+    plan: standard            # 嵌入模型 + torch 約需 1.5GB 以上記憶體；512MB 方案通常會 OOM
+    region: singapore         # 離台灣較近，可自行更換
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('intfloat/multilingual-e5-small')"
+    startCommand: python app.py
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: HF_HOME            # 建置時下載的模型放在專案目錄，執行時直接使用，避免冷啟動重抓
+        value: /opt/render/project/src/.hf_cache
+      - key: EMBED_MODEL
+        value: intfloat/multilingual-e5-small
+      - key: GROQ_API_KEY       # 選填：不設定則由使用者在介面輸入自己的 Key
+        sync: false
+      - key: APP_PASSWORD       # 選填：設定後整站需登入（帳號預設 admin，可用 APP_USER 改）
+        sync: false

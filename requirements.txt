@@ -1,0 +1,14 @@
+# 僅 CPU 版 PyTorch（體積小很多，Render 沒有 GPU）
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+sentence-transformers>=3.0
+chromadb>=0.5
+gradio>=5.29,<6
+fastapi
+uvicorn[standard]
+groq
+pypdf
+python-docx
+scikit-learn
+numpy
+Pillow
